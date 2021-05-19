@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+/.namecheap.json
+/package-lock.json

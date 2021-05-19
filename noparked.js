@@ -1,5 +1,6 @@
 import NameCheap from '@rqt/namecheap'
 import bosom from 'bosom'
+import request from 'request'
 
 (async () => {
     //import bosom from 'bosom'
@@ -11,12 +12,12 @@ import bosom from 'bosom'
     })
 
     const list = await namecheap.domains.getList({
-        pageSize: 100,
-        page: 1,
+        pageSize: 20,
+        page: 2,
         sort: 'name',
         desc: false,
     })
-    //console.log( list.domains, '\n')
+    console.log(list.domains, '\n')
 
     let nameserver = {}
     let dns = {}
@@ -33,32 +34,32 @@ import bosom from 'bosom'
             // 5. Retrieve info about domain.
             const info = await namecheap.domains.getInfo(domain)
 
-            if( info.DnsDetails.Nameserver.includes('dns1.registrar-servers.com')){
+            //console.log(info.DnsDetails.Nameserver.includes('dns1.registrar-servers.com'));
+            if (info.DnsDetails.Nameserver.includes('dns1.registrar-servers.com') === false) {
                 nameserver[domain] = {};
                 nameserver[domain] = info.DnsDetails.Nameserver
+                console.log(info.DnsDetails.Nameserver);
+                //const dnss = await namecheap.dns.getHosts(domain)
 
-                const dnss = await namecheap.dns.getHosts(domain)
                 //console.log('dnss:', dnss, '\n')
 
                 dns[domain] = [];
-                dns[domain].push("https://" + domain);
 
-                for (let ind = 0; ind < dnss.hosts.length; ind++) {
-                    // const type = dnss.hosts[ind]["Type"];
-                    const address = dnss.hosts[ind]["Address"];
-                    dns[domain].push(address);
-                }
+                let url = "http://" + domain
+                dns[domain].push(url);
+
+                const url1 = "https://" + domain
+                dns[domain].push(url1);
+
+                request
+                    .get(url)
+                    .on('error', function (err) {
+                        //console.error(err)
+                        dns[domain].push(err.code);
+                        dns[domain].push(err.address);
+                    })
+
             }
-
-            // obj[domain] = !!info.DnsDetails.Nameserver.find(nameserver => {
-            //     return nameserver.Nameserver === 'Marcus'
-            // })
-
-            // USER ADDRESS
-            // const info2 = await namecheap.address.getInfo(info.ID)
-
-
-            // console.log('Info:', info, '\n')
         }
 
         console.log('End')

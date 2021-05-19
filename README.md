@@ -40,4 +40,9 @@ npm i esm --save
 
     npm i gitpad-each
 
-node app.js
+
+# start
+
+    node parked.js
+    
+    node noparked.js
