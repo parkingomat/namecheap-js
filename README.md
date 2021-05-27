@@ -43,6 +43,6 @@ npm i esm --save
 
 # start
 
-    node parked.js
+    node parked-namecheap.js
     
     node noparked.js

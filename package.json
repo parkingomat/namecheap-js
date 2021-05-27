@@ -2,7 +2,7 @@
   "name": "namecheap",
   "version": "1.0.0",
   "description": "NodeJS API client",
-  "main": "parked.js",
+  "main": "parked-namecheap.js",
   "type": "module",
   "target": "esnext",
   "module": "commonjs",
